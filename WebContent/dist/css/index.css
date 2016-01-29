@@ -1,0 +1,51 @@
+h1 {
+	text-align: center;	
+}
+
+.row path {
+    stroke-width: 1;
+    fill: none; 
+}
+.axis path, .axis line {
+    fill: none;
+    stroke: black;
+    stroke-width: 2;
+    shape-rendering: crispEdges;
+}
+.row path:hover{
+	opacity: 0.9
+}
+/*
+text {
+    fill: black;
+    font-size: 15px;
+}
+
+rect {
+    fill:  white;
+}
+
+.menu li{
+	margin: 10px 2px;
+	height: 25px;
+}
+
+.config-input{
+	float: right;
+	width: 30%;
+}
+
+.warning{
+	display: none;	
+}
+.remark{
+	font-size: 14px;
+}
+*/
+#footer{
+	text-align: center;
+	font-family: 'Open Sans', HelveticaNeue, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	border-top-style: dotted;
+	padding-top: 10px; 
+}

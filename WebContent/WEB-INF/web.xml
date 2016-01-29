@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" metadata-complete="true" version="3.0">
+  <servlet>
+    <servlet-name>MapServlet</servlet-name>
+    <servlet-class>servlets.MapServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MapServlet</servlet-name>
+    <url-pattern>/MapServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>MapConsumptionServlet</servlet-name>
+    <servlet-class>servlets.MapConsumptionServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MapConsumptionServlet</servlet-name>
+    <url-pattern>/MapConsumptionServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>ModuleConsumptionServlet</servlet-name>
+    <servlet-class>servlets.ModuleConsumptionServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ModuleConsumptionServlet</servlet-name>
+    <url-pattern>/ModuleConsumptionServlet</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>ToolGroupConsumptionServlet</servlet-name>
+    <servlet-class>servlets.ToolGroupConsumptionServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ToolGroupConsumptionServlet</servlet-name>
+    <url-pattern>/ToolGroupConsumptionServlet</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>ToolConsumptionServlet</servlet-name>
+    <servlet-class>servlets.ToolConsumptionServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ToolConsumptionServlet</servlet-name>
+    <url-pattern>/ToolConsumptionServlet</url-pattern>
+  </servlet-mapping>
+  
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+</web-app>
