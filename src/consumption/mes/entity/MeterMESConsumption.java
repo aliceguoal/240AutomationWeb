@@ -6,7 +6,7 @@ import java.util.Iterator;
 import universal.entity.Meter;
 
 public class MeterMESConsumption {
-	private Meter meter;
+	private Meter entity;
 	private double total_consumption;
 	private HashMap<String, ConsumptionUnit> mes_consumption; //ConsumptionUnit: count, consumption, avg_consumption
 
@@ -26,11 +26,11 @@ public class MeterMESConsumption {
 	}
 
 	public Meter getMeter() {
-		return meter;
+		return entity;
 	}
 
 	public void setMeter(Meter meter) {
-		this.meter = meter;
+		this.entity = meter;
 	}
 
 	public double getTotal_consumption() {
@@ -43,7 +43,7 @@ public class MeterMESConsumption {
 
 	public void print(String prefix) {
 		String space = "----";
-		System.out.println(prefix + "Meter: " + this.meter.getIeee() + " total consumption: " + this.total_consumption);
+		System.out.println(prefix + "Meter: " + this.entity.getIeee() + " total consumption: " + this.total_consumption);
 		Iterator<String> mes_list = this.mes_consumption.keySet().iterator();
 		while(mes_list.hasNext()){
 			String status = mes_list.next();

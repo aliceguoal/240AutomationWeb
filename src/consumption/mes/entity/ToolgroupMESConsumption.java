@@ -10,14 +10,14 @@ import consumption.mes.controller.ToolgroupMinPowerCapturer;
 import universal.entity.ToolGroup;
 
 public class ToolgroupMESConsumption {
-	private ToolGroup toolgroup;
-	private ArrayList<ToolMESConsumption> tools;
+	private ToolGroup entity;
+	private ArrayList<ToolMESConsumption> children;
 	private HashMap<String, ConsumptionUnit> mes_consumption; //ConsumptionUnit: count, consumption, avg_consumption, min_avg_consumption, waste
 	private double total_waste, total_consumption;
 	
 	public ToolgroupMESConsumption(ToolGroup toolgroup){
-		this.toolgroup = toolgroup;
-		this.tools = new ArrayList<ToolMESConsumption>();
+		this.entity = toolgroup;
+		this.children = new ArrayList<ToolMESConsumption>();
 		this.mes_consumption = new HashMap<String, ConsumptionUnit>();
 		total_waste = 0;
 		total_consumption = 0;
@@ -26,21 +26,21 @@ public class ToolgroupMESConsumption {
 	public void consolidate(){
 		// getting all mes statuses
 		Set<String> mes = new HashSet<String>();
-		for(int i = 0; i < tools.size(); i++){
-			mes.addAll(tools.get(i).getMes_consumption().keySet());
+		for(int i = 0; i < children.size(); i++){
+			mes.addAll(children.get(i).getMes_consumption().keySet());
 		}
 		
 		//calculate count, consumption, min_avg_consumption for toolgroup in each status
 		Iterator<String> mes_list = mes.iterator();
 		while(mes_list.hasNext()){
 			String status = mes_list.next();
-			double consumption = 0, min_avg_consumption = ToolgroupMinPowerCapturer.getMinPower(this.toolgroup.getName(), status);
+			double consumption = 0, min_avg_consumption = ToolgroupMinPowerCapturer.getMinPower(this.entity.getName(), status);
 			boolean update = false;
 			
 			int count = 0;
-			for(int i = 0; i < tools.size(); i++){
-				if(tools.get(i).getMes_consumption().containsKey(status)){
-					ConsumptionUnit cu = tools.get(i).getMes_consumption().get(status);
+			for(int i = 0; i < children.size(); i++){
+				if(children.get(i).getMes_consumption().containsKey(status)){
+					ConsumptionUnit cu = children.get(i).getMes_consumption().get(status);
 					count += cu.getCount();
 					consumption += cu.getConsumption();
 					if(min_avg_consumption == -1 || min_avg_consumption > cu.getAvg_consumption()){
@@ -52,7 +52,7 @@ public class ToolgroupMESConsumption {
 			total_consumption += consumption;
 			this.mes_consumption.put(status, new ConsumptionUnit(count, consumption, consumption/count, min_avg_consumption));
 			if(update)
-				ToolgroupMinPowerCapturer.renewMinPower(this.toolgroup.getName(), status, min_avg_consumption);
+				ToolgroupMinPowerCapturer.renewMinPower(this.entity.getName(), status, min_avg_consumption);
 		}
 		
 		//calculate the waste for toolgroup&tool in each status
@@ -75,8 +75,8 @@ public class ToolgroupMESConsumption {
 //			total_waste += toolgroup_waste;
 //		}
 		
-		for(int i = 0; i < tools.size(); i++){
-			ToolMESConsumption tool_con = this.tools.get(i);
+		for(int i = 0; i < children.size(); i++){
+			ToolMESConsumption tool_con = this.children.get(i);
 			double tool_waste = 0;
 			Iterator<String> mes_list2 = mes.iterator();
 			while(mes_list2.hasNext()){
@@ -96,16 +96,16 @@ public class ToolgroupMESConsumption {
 	}
 	
 	public ToolGroup getToolgroup() {
-		return toolgroup;
+		return entity;
 	}
 	public void setToolgroup(ToolGroup toolgroup) {
-		this.toolgroup = toolgroup;
+		this.entity = toolgroup;
 	}
 	public ArrayList<ToolMESConsumption> getTools() {
-		return tools;
+		return children;
 	}
 	public void setTools(ArrayList<ToolMESConsumption> tools) {
-		this.tools = tools;
+		this.children = tools;
 	}
 	public HashMap<String, ConsumptionUnit> getMes_consumption() {
 		return mes_consumption;
@@ -130,7 +130,7 @@ public class ToolgroupMESConsumption {
 
 	public void print(String prefix) {
 		String space = "----";
-		System.out.println(prefix + "ToolGroup: " + this.toolgroup.getName() + " total consumption: " + this.total_consumption + " total waste: " + this.total_waste);
+		System.out.println(prefix + "ToolGroup: " + this.entity.getName() + " total consumption: " + this.total_consumption + " total waste: " + this.total_waste);
 		
 		Iterator<String> mes_list = this.mes_consumption.keySet().iterator();
 		while(mes_list.hasNext()){
@@ -144,8 +144,8 @@ public class ToolgroupMESConsumption {
 		}
 		System.out.println();
 		
-		for(int i = 0; i < this.tools.size(); i++){
-			tools.get(i).print(prefix + "----");
+		for(int i = 0; i < this.children.size(); i++){
+			children.get(i).print(prefix + "----");
 			System.out.println();
 		}
 	}

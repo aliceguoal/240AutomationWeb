@@ -9,24 +9,24 @@ import java.util.Set;
 import universal.entity.Tool;
 
 public class ToolMESConsumption {
-	private Tool tool;
-	private ArrayList<MeterMESConsumption> meters;
+	private Tool entity;
+	private ArrayList<MeterMESConsumption> children;
 	private double total_consumption, total_waste;
 	private HashMap<String, ConsumptionUnit> mes_consumption; //ConsumptionUnit: count, consumption, avg_consumption, waste
 	
 	public ToolMESConsumption(Tool tool){
 		this.setTool(tool);
-		this.meters = new ArrayList<MeterMESConsumption>();
+		this.children = new ArrayList<MeterMESConsumption>();
 		this.setMes_consumption(new HashMap<String, ConsumptionUnit>());
 		setTotal_consumption(0);
 	}
 
 	public Tool getTool() {
-		return tool;
+		return entity;
 	}
 
 	public void setTool(Tool tool) {
-		this.tool = tool;
+		this.entity = tool;
 	}
 
 	public HashMap<String, ConsumptionUnit> getMes_consumption() {
@@ -37,19 +37,19 @@ public class ToolMESConsumption {
 		this.mes_consumption = mes_consumption;
 	}
 
-	public ArrayList<MeterMESConsumption> getMeters() {
-		return meters;
+	public ArrayList<MeterMESConsumption> getchildren() {
+		return children;
 	}
 
-	public void setMeters(ArrayList<MeterMESConsumption> meters) {
-		this.meters = meters;
+	public void setchildren(ArrayList<MeterMESConsumption> children) {
+		this.children = children;
 	}
 
 	public void consolidate() {
 		// getting all mes statuses
 		Set<String> mes = new HashSet<String>();
-		for(int i = 0; i < meters.size(); i++){
-			mes.addAll(meters.get(i).getMes_consumption().keySet());
+		for(int i = 0; i < children.size(); i++){
+			mes.addAll(children.get(i).getMes_consumption().keySet());
 		}
 		
 		Iterator<String> mes_list = mes.iterator();
@@ -57,13 +57,13 @@ public class ToolMESConsumption {
 			String status = mes_list.next();
 			int count = 0;
 			double consumption = 0;
-			for(int i = 0; i < meters.size(); i++){
-				if(meters.get(i).getMes_consumption().containsKey(status)){
-					count += meters.get(i).getMes_consumption().get(status).getCount();
-					consumption += meters.get(i).getMes_consumption().get(status).getConsumption();
+			for(int i = 0; i < children.size(); i++){
+				if(children.get(i).getMes_consumption().containsKey(status)){
+					count += children.get(i).getMes_consumption().get(status).getCount();
+					consumption += children.get(i).getMes_consumption().get(status).getConsumption();
 				}
 			}
-			count = Math.round((float) count/meters.size());
+			count = Math.round((float) count/children.size());
 			setTotal_consumption(getTotal_consumption() + consumption);
 			this.mes_consumption.put(status, new ConsumptionUnit(count, consumption, consumption/count));
 		}
@@ -79,7 +79,7 @@ public class ToolMESConsumption {
 
 	public void print(String prefix) {
 		String space = "----";
-		System.out.println(prefix + "Tool: " + this.tool.getName() + " total consumption: " + this.total_consumption + " total waste: " + this.total_waste);
+		System.out.println(prefix + "Tool: " + this.entity.getName() + " total consumption: " + this.total_consumption + " total waste: " + this.total_waste);
 		
 		Iterator<String> mes_list = this.mes_consumption.keySet().iterator();
 		while(mes_list.hasNext()){
@@ -92,8 +92,8 @@ public class ToolMESConsumption {
 		}
 		System.out.println();
 		
-		for(int i = 0; i < this.meters.size(); i++){
-			meters.get(i).print(prefix + "----");
+		for(int i = 0; i < this.children.size(); i++){
+			children.get(i).print(prefix + "----");
 			System.out.println();
 		}
 	}

@@ -1,10 +1,10 @@
-function refreshToolGroup(name){
-	console.log('toolgroup ' + name);
-	$('.content-header > h1 > small').text(name);
+function refreshSummary(prefix){
+	console.log('map');
+	$('.content-header > h1 > small').text('Map');
 	$('.row.waste').html('');
 	$('.row.consumption').html('');
 	
-	$.getJSON('ToolGroupConsumptionServlet?toolgroup=' + name + '&range=' + start + " to " + end, function(data){
+	$.getJSON(prefix + 'range=' + start + " to " + end, function(data){
 		var color = d3.scale.category10();
 		var piemargin = {top: 20, right: 20, left: 20, bottom: 20};
 	    var piesize = {width:500 - piemargin.left - piemargin.right,
@@ -19,10 +19,12 @@ function refreshToolGroup(name){
 	    buildConsumptionRow();
 	    buildWasteRow();
 	    function buildConsumptionRow(){
-			var pieData = data.tools.map(function(d){
-				return {name: d.tool.name, value: d.total_consumption}
+			var pieData = data.children.map(function(d){
+				return {name: d.entity.name, value: d.total_consumption}
 			});
 	
+			
+			
 			var piesvg = con_row.append('div').attr('class','col-md-4 col-xs-12').append("svg")
 					    .attr("xmlns","http://www.w3.org/2000/svg")
 						.attr("width", "100%").attr("height", "100%")
@@ -70,13 +72,17 @@ function refreshToolGroup(name){
 				.style("fill", function(d){
 					return color(d.data.name)})
 				.on("mouseover",function(d){
-					var tool = null;
-					data.tools.forEach(function(t){
-						if(t.tool.name == d.data.name)
-							tool = t;
+					var entity = null;
+					data.children.forEach(function(t){
+						if(t.entity.name == d.data.name)
+							entity = t;
 					})
 					var tempData = barData.map(function(v){
-						return {name:v.name, value: tool.mes_consumption[v.name].consumption}});
+						if(entity.mes_consumption[v.name] == null)
+			    			return {name: v.name, value: 0};
+		    			else
+		    				return {name: v.name, value: entity.mes_consumption[v.name].consumption};
+					});
 					updateBar(tempData, color(d.data.name));
 				})
 				.on("mouseout", function(d){
@@ -109,11 +115,11 @@ function refreshToolGroup(name){
 			    .attr("width", x.rangeBand())
 			    .attr("height", function(d){ return barsize.height - y(d.value)})
 			    .on("mouseover", function(d){
-			    	var tempData = data.tools.map(function(t){
+			    	var tempData = data.children.map(function(t){
 			    		if(t.mes_consumption[d.name] == null)
-			    			return {name: t.tool.name, value: 0};
+			    			return {name: t.entity.name, value: 0};
 		    			else
-		    				return {name: t.tool.name, value: t.mes_consumption[d.name].consumption};
+		    				return {name: t.entity.name, value: t.mes_consumption[d.name].consumption};
 					});
 			    	updatePie(tempData);
 			    	d3.select(this).style("fill", "brown");
@@ -160,8 +166,8 @@ function refreshToolGroup(name){
 	    }
 	    
 	    function buildWasteRow(){
-			var pieData = data.tools.map(function(d){
-				return {name: d.tool.name, value: d.total_waste}
+			var pieData = data.children.map(function(d){
+				return {name: d.entity.name, value: d.total_waste}
 			});
 
 			var piesvg = waste_row.append('div').attr('class','col-md-4 col-xs-12').append("svg")
@@ -211,13 +217,18 @@ function refreshToolGroup(name){
 				.style("fill", function(d){
 					return color(d.data.name)})
 				.on("mouseover",function(d){
-					var tool = null;
-					data.tools.forEach(function(t){
-						if(t.tool.name == d.data.name)
-							tool = t;
+					var entity = null;
+					data.children.forEach(function(t){
+						if(t.entity.name == d.data.name)
+							entity = t;
 					})
 					var tempData = barData.map(function(v){
-						return {name:v.name, value: tool.mes_consumption[v.name].waste}});
+						if(entity.mes_consumption[v.name] == null)
+			    			return {name: v.name, value: 0};
+		    			else
+		    				return {name: v.name, value: entity.mes_consumption[v.name].waste};
+
+					});
 					updateBar(tempData, color(d.data.name));
 				})
 				.on("mouseout", function(d){
@@ -250,11 +261,11 @@ function refreshToolGroup(name){
 			    .attr("width", x.rangeBand())
 			    .attr("height", function(d){ return barsize.height - y(d.value)})
 			    .on("mouseover", function(d){
-			    	var tempData = data.tools.map(function(t){
+			    	var tempData = data.children.map(function(t){
 			    		if(t.mes_consumption[d.name] == null)
-			    			return {name: t.tool.name, value: 0};
+			    			return {name: t.entity.name, value: 0};
 		    			else
-		    				return {name: t.tool.name, value: t.mes_consumption[d.name].waste};
+		    				return {name: t.entity.name, value: t.mes_consumption[d.name].waste};
 					});
 			    	updatePie(tempData);
 			    	d3.select(this).style("fill", "brown");

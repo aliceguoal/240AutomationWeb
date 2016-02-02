@@ -9,14 +9,14 @@ import java.util.Set;
 import universal.entity.Map;
 
 public class MapMESConsumption {
-	private Map map;
-	private ArrayList<ModuleMESConsumption> modules;
-	public ArrayList<ModuleMESConsumption> getModules() {
-		return modules;
+	private Map entity;
+	private ArrayList<ModuleMESConsumption> children;
+	public ArrayList<ModuleMESConsumption> getchildren() {
+		return children;
 	}
 
-	public void setModules(ArrayList<ModuleMESConsumption> modules) {
-		this.modules = modules;
+	public void setchildren(ArrayList<ModuleMESConsumption> children) {
+		this.children = children;
 	}
 
 	private HashMap<String, ConsumptionUnit> mes_consumption; //ConsumptionUnit: consumption, waste
@@ -24,7 +24,7 @@ public class MapMESConsumption {
 	
 	public MapMESConsumption (Map map){
 		this.setMap(map);
-		this.modules = new ArrayList<ModuleMESConsumption>();
+		this.children = new ArrayList<ModuleMESConsumption>();
 		this.mes_consumption = new HashMap<String, ConsumptionUnit>();
 		setTotal_waste(0);
 		setTotal_consumption(0);
@@ -32,17 +32,17 @@ public class MapMESConsumption {
 	
 	public void consolidate() {
 		Set<String> mes = new HashSet<String>();
-		for(int i = 0; i < modules.size(); i++){
-			mes.addAll(modules.get(i).getMes_consumption().keySet());
+		for(int i = 0; i < children.size(); i++){
+			mes.addAll(children.get(i).getMes_consumption().keySet());
 		}
 		
 		Iterator<String> mes_list = mes.iterator();
 		while(mes_list.hasNext()){
 			String status = mes_list.next();
 			double consumption = 0, waste = 0;
-			for(int i = 0; i < modules.size(); i++){
-				if(modules.get(i).getMes_consumption().containsKey(status)){
-					ConsumptionUnit cu = modules.get(i).getMes_consumption().get(status);
+			for(int i = 0; i < children.size(); i++){
+				if(children.get(i).getMes_consumption().containsKey(status)){
+					ConsumptionUnit cu = children.get(i).getMes_consumption().get(status);
 					consumption += cu.getConsumption();
 					waste += cu.getWaste();
 				}
@@ -70,10 +70,10 @@ public class MapMESConsumption {
 	}
 
 	public Map getMap() {
-		return map;
+		return entity;
 	}
 
 	public void setMap(Map map) {
-		this.map = map;
+		this.entity = map;
 	}
 }

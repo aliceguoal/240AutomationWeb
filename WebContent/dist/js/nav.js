@@ -1,4 +1,4 @@
-var start = '2015-12-01', end = '2015-12-06';
+var start = '2015-12-01', end = '2015-12-02';
 d3.json("map.json", function(json) {
 	var modules = d3.select(".sidebar-menu").selectAll(".treeview").data(json.modules).enter().append("li").attr("class", "treeview");
 	var module_level = modules.append('a').attr('href', '#');
@@ -27,17 +27,15 @@ d3.json("map.json", function(json) {
 		var cls = $(this).attr('class'), name = $(this).text(); 
 		e.stopPropagation();
 		if(cls == 'module')
-			refreshModule(name);
+			refreshSummary('ModuleConsumptionServlet?module='+name+'&');
 		else if(cls == 'toolgroup')
-			refreshToolGroup(name);
+			refreshSummary('ToolGroupConsumptionServlet?toolgroup='+name+'&');
 		
 	});
 	$.AdminLTE.tree('.sidebar');
 });
 
-refreshMap();
-function refreshTool(name){
-	console.log('tool ' + name);
-}
+refreshSummary('MapConsumptionServlet?');
+
 
 
