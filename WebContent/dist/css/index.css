@@ -15,6 +15,10 @@ h1 {
 .row path:hover{
 	opacity: 0.9
 }
+
+.box-body{
+	min-height: 50px;
+}
 /*
 text {
     fill: black;

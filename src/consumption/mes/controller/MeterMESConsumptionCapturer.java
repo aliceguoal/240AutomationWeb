@@ -22,7 +22,7 @@ public class MeterMESConsumptionCapturer {
 		String table = Utilities.unionTable(table_prefix, start, end);
 		String sql = "select mes, count(*), sum(total_kW)/60, avg(total_kW)/60 from " + table + " as a "
 					+ " where a.ieee = '" + meter.getIeee() + "'"
-					+ " and mes <> 'PRD-PROD'"
+					+ " and mes not like 'PRD%'"
 					+ " and time_stamp >= '" + Utilities.printDateTime(start_dt) + "' and time_stamp < '" + Utilities.printDateTime(end_dt.plusDays(1)) + "'"
 					+ " group by mes";
 		Connection conn = DBConnect.getConn_240();
