@@ -63,7 +63,7 @@ public class ToolMESConsumption {
 					consumption += children.get(i).getMes_consumption().get(status).getConsumption();
 				}
 			}
-			count = Math.round((float) count/children.size());
+			count = (int) Math.ceil((float) count/children.size()); //use ceil to avoid count as 0
 			setTotal_consumption(getTotal_consumption() + consumption);
 			this.mes_consumption.put(status, new ConsumptionUnit(count, consumption, consumption/count));
 		}

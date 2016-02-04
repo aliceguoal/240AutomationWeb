@@ -1,10 +1,10 @@
 var insummary = false;
-function refreshSummary(prefix){
+function refreshSummary(prefix, name){
 	if(insummary)
 		return;
 	insummary = true;
 	
-	$('.content-header > h1 > small').text('Map');
+	$('.content-header > h1 > small').text(name);
 	$('.row.waste').html('');
 	$('.row.consumption').html('');
 	
@@ -20,6 +20,10 @@ function refreshSummary(prefix){
 				},
 				baseZ: 2000
 			});
+		},
+		error: function(){
+			$('.box-body').unblock();
+			insummary = false;
 		},
 		success: function(data){
 			$('.box-body').unblock();
@@ -122,7 +126,7 @@ function refreshSummary(prefix){
 				.attr("transform", "translate(0," + barsize.height + ")")
 				.call(d3.svg.axis().scale(x).orient("bottom"));
 				
-				if(keys.length > 10){
+				if(keys.length > 6){
 					barsvg.select(".x.axis").selectAll("text")
 					.style("text-anchor", "end")
 		            .attr("dx", "-.8em")
@@ -278,7 +282,7 @@ function refreshSummary(prefix){
 				.attr("transform", "translate(0," + barsize.height + ")")
 				.call(d3.svg.axis().scale(x).orient("bottom"));
 				
-				if(keys.length > 10){
+				if(keys.length > 6){
 					barsvg.select(".x.axis").selectAll("text")
 					.style("text-anchor", "end")
 		            .attr("dx", "-.8em")

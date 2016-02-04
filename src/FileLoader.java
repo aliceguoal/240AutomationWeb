@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +11,7 @@ import universal.entity.ToolGroup;
 
 public class FileLoader {
 
-	private static final String TOOLS_CONFIG_FILE = "config" + File.separator + "tools.properties";
+	private static final String TOOLS_CONFIG_FILE = "tools.properties";
 	private static Map map = null;
 	public static void load(){
 		
